@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RE Protocol Quiz - Test Your Knowledge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e6ed;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #9ca3af;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #3b82f6;
+        }
+
+        /* Quiz Container */
+        .quiz-page {
+            padding-top: 120px;
+            padding-bottom: 3rem;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .quiz-header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #9ca3af;
+        }
+
+        /* Progress Bar */
+        .quiz-progress {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 10px;
+            height: 10px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+
+        .quiz-progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #9ca3af;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+        /* Question Card */
+        .question-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+            margin-bottom: 2rem;
+        }
+
+        .question-number {
+            color: #3b82f6;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .question-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: #f3f4f6;
+            line-height: 1.4;
+        }
+
+        /* Answer Options */
+        .answer-option {
+            background: rgba(30, 41, 59, 0.5);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .answer-option:hover:not(.disabled) {
+            border-color: rgba(59, 130, 246, 0.5);
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .answer-option.selected {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .answer-option.correct {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        .answer-option.incorrect {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .answer-option.disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .answer-letter {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .answer-option.correct .answer-letter {
+            background: #10b981;
+        }
+
+        .answer-option.incorrect .answer-letter {
+            background: #ef4444;
+        }
+
+        .answer-text {
+            flex: 1;
+            font-size: 1.1rem;
+        }
+
+        /* Explanation */
+        .explanation {
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            border-radius: 8px;
+            display: none;
+            line-height: 1.6;
+        }
+
+        .explanation.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .explanation-title {
+            font-weight: 700;
+            color: #60a5fa;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Buttons */
+        .quiz-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        .quiz-button {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .quiz-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .quiz-button.secondary {
+            background: transparent;
+            border: 2px solid #3b82f6;
+        }
+
+        .quiz-button.secondary:hover:not(:disabled) {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        /* Results */
+        .results-card {
+            text-align: center;
+            padding: 3rem;
+        }
+
+        .results-score {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .results-message {
+            font-size: 1.5rem;
+            color: #9ca3af;
+            margin-bottom: 2rem;
+        }
+
+        .results-breakdown {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .result-stat {
+            background: rgba(30, 41, 59, 0.5);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .result-stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #3b82f6;
+        }
+
+        .result-stat-label {
+            color: #9ca3af;
+            margin-top: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+
+        footer a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #8b5cf6;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-header h1 {
+                font-size: 2rem;
+            }
+
+            .question-text {
+                font-size: 1.2rem;
+            }
+
+            .quiz-container {
+                padding: 0 1rem;
+            }
+
+            .question-card {
+                padding: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .results-score {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">RE Protocol</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="learn.html" class="nav-link">Learn</a>
+                <a href="quiz.html" class="nav-link active">Quiz</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Quiz Page -->
+    <div class="quiz-page">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h1>Test Your Knowledge</h1>
+                <p class="subtitle">See how well you understand RE Protocol</p>
+            </div>
+
+            <div class="quiz-progress">
+                <div class="quiz-progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">Question 1 of 15</div>
+
+            <div id="quizContent"></div>
+
+            <div class="quiz-buttons" id="quizButtons"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Made with ❤️ by <a href="https://x.com/web3gurru" target="_blank">@web3gurru</a></p>
+        </div>
+    </footer>
+
+    <script>
+        // Quiz Questions Data - Based on RE Protocol Documentation
+        // Correct answers distributed: A, B, C, D, A, B, C, D, A, B, C, D, A, B, C
+        const quizQuestions = [
+            {
+                question: "What is the primary purpose of RE Protocol?",
+                options: [
+                    "To bridge DeFi capital with real-world reinsurance contracts",
+                    "To provide crypto trading leverage",
+                    "To create synthetic insurance derivatives",
+                    "To tokenize life insurance policies"
+                ],
+                correct: 0,
+                explanation: "RE Protocol channels on-chain capital into real-world reinsurance treaties through a fully transparent, blockchain-native workflow, connecting DeFi with traditional reinsurance markets."
+            },
+            {
+                question: "What does ICL stand for in RE Protocol?",
+                options: [
+                    "Initial Capital Lock",
+                    "Insurance Capital Layer",
+                    "Integrated Chain Link",
+                    "Investment Collateral Ledger"
+                ],
+                correct: 1,
+                explanation: "ICL stands for Insurance Capital Layer - the smart contracts where users stake stablecoins to participate in reinsurance contracts."
+            },
+            {
+                question: "Which stablecoins can be deposited into RE Protocol?",
+                options: [
+                    "Only USDC",
+                    "Only Ethena tokens (USDe and sUSDe)",
+                    "USDC, DAI, USDe, sUSDe, and AUSD",
+                    "Any ERC-20 stablecoin"
+                ],
+                correct: 2,
+                explanation: "RE Protocol accepts multiple stablecoins including USDC, DAI, USDe, sUSDe, and AUSD, providing flexibility for different user preferences."
+            },
+            {
+                question: "What is the typical APY range for reUSD (Basis-Plus)?",
+                options: [
+                    "2-4%",
+                    "15-23%",
+                    "25-35%",
+                    "6-10%"
+                ],
+                correct: 3,
+                explanation: "reUSD offers low-volatility yields of approximately 6-10% APY through delta-neutral ETH basis strategies or short-duration T-bills plus protocol spread."
+            },
+            {
+                question: "What is the typical APY range for reUSDe (Insurance Alpha)?",
+                options: [
+                    "15-23%",
+                    "3-6%",
+                    "8-12%",
+                    "30-40%"
+                ],
+                correct: 0,
+                explanation: "reUSDe offers high underwriting yields of 15-23% APY by capturing the underwriting spread from real U.S. insurance programs and absorbing first-loss risk."
+            },
+            {
+                question: "What is the main difference in risk between reUSD and reUSDe?",
+                options: [
+                    "reUSD has higher risk than reUSDe",
+                    "reUSD is principal-protected while reUSDe absorbs first-loss risk",
+                    "Both have identical risk profiles",
+                    "reUSDe is safer but offers lower returns"
+                ],
+                correct: 1,
+                explanation: "reUSD is principal-protected and tracks risk-free rates, while reUSDe sits junior in the capital stack, absorbing portfolio losses first but earning higher profit participation (16-25% returns)."
+            },
+            {
+                question: "When is the Net Asset Value (NAV) updated for reUSD and reUSDe tokens?",
+                options: [
+                    "Every hour",
+                    "Weekly on Mondays",
+                    "Daily at UTC 00:00",
+                    "Only during redemption windows"
+                ],
+                correct: 2,
+                explanation: "At UTC 00:00 daily, the protocol recalculates the Net Asset Value (NAV) reflecting both realized and projected yields. The token price increases daily rather than token quantity."
+            },
+            {
+                question: "How does reUSD generate its yield?",
+                options: [
+                    "Through token emissions",
+                    "Through NFT trading fees",
+                    "Only from reinsurance premiums",
+                    "By selecting the higher of risk-free rate + 250 bps OR Ethena basis yield + 250 bps"
+                ],
+                correct: 3,
+                explanation: "reUSD uses a dual-source yield floor, selecting the higher of: (1) 7-day trailing average Risk-Free Rate + 250 bps, or (2) Current Ethena basis trade yield + 250 bps."
+            },
+            {
+                question: "What type of reinsurance contracts does RE Protocol use?",
+                options: [
+                    "Fully-collateralized quota-share reinsurance contracts",
+                    "Catastrophic event derivatives",
+                    "Uncollateralized credit default swaps",
+                    "Weather insurance futures"
+                ],
+                correct: 0,
+                explanation: "All ICLs participate in fully-collateralized quota-share reinsurance notes backed by licensed insurance companies, with collateral held on-chain in trust accounts."
+            },
+            {
+                question: "How often are reUSDe redemptions processed?",
+                options: [
+                    "Instantly at any time",
+                    "Quarterly, subject to actuarial release",
+                    "Daily",
+                    "Annually"
+                ],
+                correct: 1,
+                explanation: "reUSDe redemptions are processed quarterly on a pro-rata basis subject to actuarial release of surplus capital. Requests are captured in the first 72 hours of each fiscal quarter."
+            },
+            {
+                question: "What is a Surplus Note in RE Protocol?",
+                options: [
+                    "A governance token for voting",
+                    "An NFT representing insurance claims",
+                    "A legally binding note where ICL lends capital to reinsurers, ranking junior to policyholders",
+                    "A promotional bonus token"
+                ],
+                correct: 2,
+                explanation: "The ICL lends capital under a legally binding Surplus Note, ranking junior to policyholders. Drawn funds move into a §114 Trust Account providing admitted collateral."
+            },
+            {
+                question: "Which oracle network does RE Protocol use for transparency?",
+                options: [
+                    "Band Protocol",
+                    "API3",
+                    "Pyth Network",
+                    "Chainlink"
+                ],
+                correct: 3,
+                explanation: "RE Protocol uses Chainlink oracles to publish price feeds, trust balances, surplus-note schedules, and redemption queues, ensuring 24/7 proof of funds and transparency."
+            },
+            {
+                question: "Is KYC/AML verification required to use RE Protocol?",
+                options: [
+                    "Yes, mandatory for all users",
+                    "No, it's completely permissionless",
+                    "Only for deposits over $100,000",
+                    "Only for institutional investors"
+                ],
+                correct: 0,
+                explanation: "KYC/AML verification is mandatory for all users of RE Protocol to ensure regulatory compliance. U.S. persons and residents of restricted jurisdictions are excluded."
+            },
+            {
+                question: "Which blockchains does RE Protocol currently support?",
+                options: [
+                    "Only Ethereum",
+                    "Ethereum, Avalanche, and Arbitrum",
+                    "Ethereum and Polygon",
+                    "All EVM-compatible chains"
+                ],
+                correct: 1,
+                explanation: "RE Protocol currently supports three blockchains: Ethereum, Avalanche, and Arbitrum, providing multi-chain access to reinsurance yields."
+            },
+            {
+                question: "What happens to idle reUSDe capital while awaiting deployment?",
+                options: [
+                    "It sits dormant earning nothing",
+                    "It's automatically converted to reUSD",
+                    "It earns the Ethena sUSDe basis-trade yield",
+                    "It's locked and inaccessible"
+                ],
+                correct: 2,
+                explanation: "Idle reUSDe liquidity awaiting deployment automatically accrues the sUSDe rate (Ethena's staked USDe), ensuring holders are compensated even when capital utilization is temporarily low."
+            }
+        ];
+
+        // Quiz State
+        let currentQuestion = 0;
+        let selectedAnswer = null;
+        let score = 0;
+        let answered = false;
+        let shuffledQuestions = [];
+
+        // Shuffle array function
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Shuffle question options
+        function shuffleQuestionOptions(question) {
+            const optionsWithIndices = question.options.map((option, index) => ({
+                text: option,
+                originalIndex: index
+            }));
+            const shuffled = shuffleArray(optionsWithIndices);
+            
+            return {
+                ...question,
+                options: shuffled.map(item => item.text),
+                correctIndex: shuffled.findIndex(item => item.originalIndex === question.correct)
+            };
+        }
+
+        // Initialize Quiz
+        function initQuiz() {
+            // Shuffle all questions and their options
+            shuffledQuestions = quizQuestions.map(q => shuffleQuestionOptions(q));
+            showQuestion();
+            updateProgress();
+        }
+
+        // Show Current Question
+        function showQuestion() {
+            const question = shuffledQuestions[currentQuestion];
+            const content = document.getElementById('quizContent');
+            
+            content.innerHTML = `
+                <div class="question-card">
+                    <div class="question-number">QUESTION ${currentQuestion + 1}</div>
+                    <div class="question-text">${question.question}</div>
+                    <div class="answers">
+                        ${question.options.map((option, index) => `
+                            <div class="answer-option" onclick="selectAnswer(${index})">
+                                <div class="answer-letter">${String.fromCharCode(65 + index)}</div>
+                                <div class="answer-text">${option}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="explanation" id="explanation">
+                        <div class="explanation-title">💡 Explanation:</div>
+                        <div>${question.explanation}</div>
+                    </div>
+                </div>
+            `;
+
+            renderButtons();
+            answered = false;
+            selectedAnswer = null;
+        }
+
+        // Select Answer
+        function selectAnswer(index) {
+            if (answered) return;
+            
+            selectedAnswer = index;
+            const options = document.querySelectorAll('.answer-option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            options[index].classList.add('selected');
+            
+            renderButtons();
+        }
+
+        // Check Answer
+        function checkAnswer() {
+            if (selectedAnswer === null || answered) return;
+            
+            answered = true;
+            const question = shuffledQuestions[currentQuestion];
+            const options = document.querySelectorAll('.answer-option');
+            
+            options.forEach((opt, index) => {
+                opt.classList.add('disabled');
+                if (index === question.correctIndex) {
+                    opt.classList.add('correct');
+                }
+                if (index === selectedAnswer && index !== question.correctIndex) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            if (selectedAnswer === question.correctIndex) {
+                score++;
+            }
+
+            document.getElementById('explanation').classList.add('show');
+            renderButtons();
+        }
+
+        // Next Question
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < shuffledQuestions.length) {
+                showQuestion();
+                updateProgress();
+            } else {
+                showResults();
+            }
+        }
+
+        // Previous Question
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion();
+                updateProgress();
+            }
+        }
+
+        // Update Progress
+        function updateProgress() {
+            const progress = ((currentQuestion) / shuffledQuestions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressText').textContent = 
+                `Question ${currentQuestion + 1} of ${shuffledQuestions.length}`;
+        }
+
+        // Render Buttons
+        function renderButtons() {
+            const buttons = document.getElementById('quizButtons');
+            
+            if (!answered) {
+                buttons.innerHTML = `
+                    ${currentQuestion > 0 ? '<button class="quiz-button secondary" onclick="previousQuestion()">← Previous</button>' : ''}
+                    <button class="quiz-button" onclick="checkAnswer()" ${selectedAnswer === null ? 'disabled' : ''}>
+                        Check Answer
+                    </button>
+                `;
+            } else {
+                buttons.innerHTML = `
+                    ${currentQuestion > 0 ? '<button class="quiz-button secondary" onclick="previousQuestion()">← Previous</button>' : ''}
+                    <button class="quiz-button" onclick="nextQuestion()">
+                        ${currentQuestion < quizQuestions.length - 1 ? 'Next Question →' : 'See Results →'}
+                    </button>
+                `;
+            }
+        }
+
+        // Show Results
+        function showResults() {
+            const percentage = Math.round((score / shuffledQuestions.length) * 100);
+            let message = '';
+            
+            if (percentage >= 90) {
+                message = '🎉 Outstanding! You\'re a RE Protocol expert!';
+            } else if (percentage >= 80) {
+                message = '🌟 Excellent! You have a strong grasp of RE Protocol!';
+            } else if (percentage >= 70) {
+                message = '👏 Great job! You understand RE Protocol well!';
+            } else if (percentage >= 60) {
+                message = '👍 Good effort! Review the modules to strengthen your knowledge.';
+            } else {
+                message = '📚 Keep learning! Check out the learning modules for deeper understanding.';
+            }
+
+            const content = document.getElementById('quizContent');
+            content.innerHTML = `
+                <div class="question-card results-card">
+                    <div class="results-score">${percentage}%</div>
+                    <div class="results-message">${message}</div>
+                    <div class="results-breakdown">
+                        <div class="result-stat">
+                            <div class="result-stat-number">${score}/${shuffledQuestions.length}</div>
+                            <div class="result-stat-label">Correct Answers</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-number">${percentage}%</div>
+                            <div class="result-stat-label">Your Score</div>
+                        </div>
+                        <div class="result-stat">
+                            <div class="result-stat-number">${shuffledQuestions.length - score}</div>
+                            <div class="result-stat-label">To Review</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('progressBar').style.width = '100%';
+            document.getElementById('progressText').textContent = 'Quiz Complete!';
+
+            const buttons = document.getElementById('quizButtons');
+            buttons.innerHTML = `
+                <button class="quiz-button secondary" onclick="location.href='learn.html'">Review Modules</button>
+                <button class="quiz-button" onclick="restartQuiz()">Retake Quiz</button>
+            `;
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            answered = false;
+            initQuiz();
+        }
+
+        // Start Quiz on Page Load
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>

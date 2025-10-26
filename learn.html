@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn RE Protocol - Master Reinsurance DeFi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 100%);
+            color: #e0e6ed;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: #9ca3af;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: #3b82f6;
+        }
+
+        /* Main Content */
+        .learn-page {
+            padding-top: 120px;
+            padding-bottom: 5rem;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.3rem;
+            color: #9ca3af;
+        }
+
+        /* Module Cards */
+        .module-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .module-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.2);
+        }
+
+        .module-number {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 15px;
+            text-align: center;
+            line-height: 50px;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-card h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #f3f4f6;
+        }
+
+        .module-card p {
+            color: #9ca3af;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .module-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .tag {
+            padding: 0.5rem 1rem;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: #60a5fa;
+        }
+
+        .cta-button {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
+            display: inline-block;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.5);
+        }
+
+        .cta-section {
+            text-align: center;
+            margin-top: 4rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            color: #6b7280;
+            border-top: 1px solid rgba(59, 130, 246, 0.1);
+            margin-top: 5rem;
+        }
+
+        footer a {
+            color: #3b82f6;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #8b5cf6;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .module-card {
+                padding: 2rem;
+            }
+
+            .module-card h2 {
+                font-size: 1.5rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <div class="nav-logo">RE Protocol</div>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="learn.html" class="nav-link active">Learn</a>
+                <a href="quiz.html" class="nav-link">Quiz</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="learn-page">
+        <div class="container">
+            <div class="page-header">
+                <h1>Master RE Protocol</h1>
+                <p class="subtitle">From reinsurance basics to advanced DeFi integration</p>
+            </div>
+
+            <!-- Module 1 -->
+            <div class="module-card">
+                <div class="module-number">01</div>
+                <h2>What is Reinsurance?</h2>
+                <p>Ever wondered who insures the insurance companies? Discover the trillion-dollar market that keeps the global economy stable. Learn how reinsurance works, why it exists, and how it generates consistent, uncorrelated yields that were once exclusive to massive institutions.</p>
+                <div class="module-tags">
+                    <span class="tag">Insurance Fundamentals</span>
+                    <span class="tag">Risk Transfer</span>
+                    <span class="tag">Lloyd's of London</span>
+                </div>
+            </div>
+
+            <!-- Module 2 -->
+            <div class="module-card">
+                <div class="module-number">02</div>
+                <h2>Why Bring Reinsurance On-Chain?</h2>
+                <p>Traditional reinsurance is opaque, slow, and accessible only to institutions. Explore how blockchain technology transforms this $1 trillion market with transparency, efficiency, and democratized access. Understand the power of smart contracts, oracle networks, and on-chain settlement.</p>
+                <div class="module-tags">
+                    <span class="tag">Blockchain Benefits</span>
+                    <span class="tag">Transparency</span>
+                    <span class="tag">DeFi Integration</span>
+                </div>
+            </div>
+
+            <!-- Module 3 -->
+            <div class="module-card">
+                <div class="module-number">03</div>
+                <h2>Understanding RE Protocol</h2>
+                <p>Dive into RE Protocol's architecture. Learn about Insurance Capital Layers (ICL), how reUSD and reUSDe work, the role of Cell Managers, and how fully-collateralized quota-share reinsurance contracts generate yield. Discover what makes RE different from other DeFi protocols.</p>
+                <div class="module-tags">
+                    <span class="tag">Protocol Architecture</span>
+                    <span class="tag">Risk Pools</span>
+                    <span class="tag">Yield Generation</span>
+                </div>
+            </div>
+
+            <!-- Module 4 -->
+            <div class="module-card">
+                <div class="module-number">04</div>
+                <h2>reUSD vs reUSDe: Choose Your Strategy</h2>
+                <p>Not all yield is created equal. Compare the two flagship products: reUSD (Basis-Plus) offering 6-10% APY with principal protection, and reUSDe (Insurance Alpha) delivering 15-23% APY for Ethena community members. Learn which strategy fits your risk profile.</p>
+                <div class="module-tags">
+                    <span class="tag">Yield Strategies</span>
+                    <span class="tag">Risk Management</span>
+                    <span class="tag">Ethena Partnership</span>
+                </div>
+            </div>
+
+            <!-- Module 5 -->
+            <div class="module-card">
+                <div class="module-number">05</div>
+                <h2>Real-World Applications</h2>
+                <p>See reinsurance in action. From backing drivers in Texas and California to supporting small businesses across the US, discover the actual insurance programs RE Protocol underwrites. Learn about non-catastrophic insurance lines and why they're stable and profitable.</p>
+                <div class="module-tags">
+                    <span class="tag">Use Cases</span>
+                    <span class="tag">Real Impact</span>
+                    <span class="tag">Portfolio Diversification</span>
+                </div>
+            </div>
+
+            <!-- Module 6 -->
+            <div class="module-card">
+                <div class="module-number">06</div>
+                <h2>How RE Protocol Manages Risk</h2>
+                <p>Safety first. Understand the multi-layered risk management approach: fully-collateralized contracts, licensed insurance partners, on-chain transparency, KYC/AML compliance, and professional Cell Manager vetting. Learn why RE focuses on conservative, short-term, low-volatility contracts.</p>
+                <div class="module-tags">
+                    <span class="tag">Risk Mitigation</span>
+                    <span class="tag">Regulatory Compliance</span>
+                    <span class="tag">Collateralization</span>
+                </div>
+            </div>
+
+            <!-- Module 7 -->
+            <div class="module-card">
+                <div class="module-number">07</div>
+                <h2>Getting Started with RE Protocol</h2>
+                <p>Ready to earn real-world insurance yield? Step-by-step guide to depositing stablecoins, completing KYC, selecting your strategy, and understanding redemption windows. Learn about the RE Points Program and how to maximize your rewards across Ethereum, Avalanche, and Arbitrum.</p>
+                <div class="module-tags">
+                    <span class="tag">Onboarding</span>
+                    <span class="tag">KYC Process</span>
+                    <span class="tag">Multi-Chain</span>
+                </div>
+            </div>
+
+            <!-- Module 8 -->
+            <div class="module-card">
+                <div class="module-number">08</div>
+                <h2>DeFi Integration & Composability</h2>
+                <p>reUSD and reUSDe are ERC-20 tokens, making them fully composable across DeFi. Explore integrations with Pharaoh Exchange, Blackhole, Pendle Finance, and Curve. Learn how to use your RE tokens for lending, borrowing, liquidity provision, and yield farming.</p>
+                <div class="module-tags">
+                    <span class="tag">DeFi Composability</span>
+                    <span class="tag">Liquidity Pools</span>
+                    <span class="tag">Yield Strategies</span>
+                </div>
+            </div>
+
+            <!-- Module 9 -->
+            <div class="module-card">
+                <div class="module-number">09</div>
+                <h2>The Future of On-Chain Insurance</h2>
+                <p>Where is reinsurance heading? Explore the massive opportunity: climate change is making catastrophic risk unpredictable, but non-catastrophic insurance remains profitable. Learn how RE Protocol is creating a new asset class and why institutional capital is flowing into on-chain reinsurance.</p>
+                <div class="module-tags">
+                    <span class="tag">Industry Trends</span>
+                    <span class="tag">Institutional Adoption</span>
+                    <span class="tag">Market Opportunity</span>
+                </div>
+            </div>
+
+            <!-- Module 10 -->
+            <div class="module-card">
+                <div class="module-number">10</div>
+                <h2>Build with RE Protocol</h2>
+                <p>For developers: integrate RE Protocol into your dApps. Access the smart contracts, understand the token mechanics, and learn how to build applications that leverage real-world insurance yield. Get your tools ready and start building the future of decentralized finance.</p>
+                <div class="module-tags">
+                    <span class="tag">Developer Resources</span>
+                    <span class="tag">Smart Contracts</span>
+                    <span class="tag">Integration Guide</span>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <a href="quiz.html" class="cta-button">Test Your Knowledge →</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Ready to explore? <a href="https://re.xyz" target="_blank">Visit RE Protocol</a> | <a href="https://docs.re.xyz" target="_blank">Read the Docs</a></p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">Connecting global capital to real-world insurance yield</p>
+        </div>
+    </footer>
+</body>
+</html>
